@@ -1,0 +1,130 @@
+body {
+    margin: 0;
+    color: #222;
+    background-color: white;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+.container {
+    width: 90%;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.site-header {
+    padding: 15px 0;
+    color: white;
+    background-color: #0059b3;
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.main-nav a {
+    margin-left: 15px;
+    color: white;
+}
+
+.page {
+    min-height: 70vh;
+    padding: 35px 0;
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+.button {
+    display: inline-block;
+    border: 1px solid #0059b3;
+    padding: 8px 12px;
+    color: white;
+    background-color: #0059b3;
+    text-decoration: none;
+}
+
+.room-list {
+    margin-top: 20px;
+    border-top: 1px solid #aaa;
+}
+
+.room-item {
+    border-bottom: 1px solid #aaa;
+    padding: 15px 0;
+}
+
+.room-item h3 {
+    margin-bottom: 5px;
+}
+
+.room-item p {
+    margin: 5px 0;
+}
+
+.room-info {
+    padding-left: 20px;
+}
+
+table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #999;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #cce0f5;
+}
+
+.status {
+    color: #0059b3;
+    font-weight: bold;
+}
+
+.site-footer {
+    padding: 15px 0;
+    color: white;
+    background-color: #0059b3;
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .site-header .container {
+        display: block;
+    }
+
+    .main-nav {
+        margin-top: 10px;
+    }
+
+    .main-nav a {
+        margin-right: 12px;
+        margin-left: 0;
+    }
+
+    table {
+        font-size: 13px;
+    }
+}
