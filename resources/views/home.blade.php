@@ -16,5 +16,14 @@
                 <p>Belum ada kamar unggulan.</p>
             @endforelse
         </div>
+
+        <h2 class="section-title">5 Kamar Terbaru</h2>
+        <div class="room-list">
+            @forelse ($latestRooms as $room)
+                @include('partials.room-card', ['room' => $room])
+            @empty
+                <p>Belum ada kamar.</p>
+            @endforelse
+        </div>
     </div>
 @endsection

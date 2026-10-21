@@ -78,6 +78,81 @@ h3 {
     padding-left: 20px;
 }
 
+.section-title,
+.room-stats {
+    margin-top: 30px;
+}
+
+.room-filter {
+    margin: 20px 0;
+}
+
+.room-filter label {
+    margin-right: 6px;
+}
+
+.room-filter select,
+.room-filter input,
+.room-filter button {
+    margin-right: 12px;
+    padding: 6px;
+}
+
+.notice {
+    padding: 10px;
+    background-color: #e4f2e4;
+}
+
+.room-actions a,
+.room-actions form {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.room-actions button {
+    border: 0;
+    padding: 0;
+    color: #0059b3;
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+}
+
+.room-form {
+    max-width: 500px;
+}
+
+.room-form-field {
+    margin-bottom: 14px;
+}
+
+.room-form-field > label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.room-form-field input:not([type="checkbox"]),
+.room-form-field select,
+.room-form-field textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 7px;
+}
+
+.form-errors {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #ffe9e9;
+}
+
+.room-filter button {
+    border: 1px solid #0059b3;
+    color: white;
+    background-color: #0059b3;
+    cursor: pointer;
+}
+
 table {
     width: 100%;
     margin-top: 15px;
@@ -126,5 +201,13 @@ th {
 
     table {
         font-size: 13px;
+    }
+
+    .room-filter label,
+    .room-filter select,
+    .room-filter input,
+    .room-filter button {
+        display: block;
+        margin: 6px 0;
     }
 }
