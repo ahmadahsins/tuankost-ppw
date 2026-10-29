@@ -191,6 +191,31 @@ th {
     margin: 0;
 }
 
+.auth-box {
+    max-width: 430px;
+    margin: 0 auto;
+}
+
+.btn-primary {
+    --bs-btn-bg: #0059b3;
+    --bs-btn-border-color: #0059b3;
+}
+
+.logout-form {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.logout-form button {
+    border: 0;
+    padding: 0;
+    color: white;
+    background: none;
+    text-decoration: underline;
+    font: inherit;
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
     .site-header .container {
         display: block;

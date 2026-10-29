@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Room;
+use App\Models\User;
 use Database\Seeders\RoomSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,6 +11,17 @@ use Tests\TestCase;
 class RoomCrudTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::create([
+            'name' => 'Penguji',
+            'email' => 'penguji@example.test',
+            'password' => 'password-pengujian',
+        ]));
+    }
 
     public function test_room_can_be_created_updated_and_deleted(): void
     {
