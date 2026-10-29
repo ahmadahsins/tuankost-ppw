@@ -98,6 +98,12 @@ h3 {
     padding: 6px;
 }
 
+.room-pagination {
+    display: flex;
+    gap: 18px;
+    margin-top: 15px;
+}
+
 .notice {
     padding: 10px;
     background-color: #e4f2e4;

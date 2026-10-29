@@ -21,12 +21,36 @@ class RoomController extends Controller
         return view('home', compact('featuredRooms', 'latestRooms'));
     }
 
-    public function index(Request $request): View
+    public function index(Request $request): View|RedirectResponse
     {
+        if ($request->filled('search')) {
+            return redirect()->route('rooms.search', $request->only('type', 'search'));
+        }
+
         $requestedType = $request->query('type', '');
-        $requestedSearch = $request->query('search', '');
         $type = is_string($requestedType) ? $requestedType : '';
+        $types = Room::select('type')->distinct()->orderBy('type')->pluck('type');
+
+        $rooms = Room::query()
+            ->when($type !== '' && $types->contains($type), function ($query) use ($type) {
+                $query->where('type', $type);
+            })
+            ->orderBy('room_number')
+            ->paginate(5)
+            ->withQueryString();
+
+        return view('rooms.index', array_merge(
+            compact('rooms', 'types', 'type'),
+            $this->statistics(),
+        ));
+    }
+
+    public function search(Request $request): View
+    {
+        $requestedSearch = $request->query('search', '');
+        $requestedType = $request->query('type', '');
         $search = is_string($requestedSearch) ? trim($requestedSearch) : '';
+        $type = is_string($requestedType) ? $requestedType : '';
         $types = Room::select('type')->distinct()->orderBy('type')->pluck('type');
 
         $rooms = Room::query()
@@ -34,26 +58,26 @@ class RoomController extends Controller
                 $query->where('type', $type);
             })
             ->when($search !== '', function ($query) use ($search) {
-                $query->where('room_number', 'like', '%'.$search.'%');
+                $query->where(function ($query) use ($search) {
+                    $query->where('room_number', 'like', '%'.$search.'%')
+                        ->orWhere('type', 'like', '%'.$search.'%');
+                });
             })
             ->orderBy('room_number')
-            ->get();
+            ->paginate(5)
+            ->withQueryString();
 
-        $totalRooms = Room::count();
-        $totalPrice = Room::sum('monthly_price');
-        $highestPrice = Room::max('monthly_price');
-        $lowestPrice = Room::min('monthly_price');
+        return view('rooms.search', compact('rooms', 'types', 'type', 'search'));
+    }
 
-        return view('rooms.index', compact(
-            'rooms',
-            'types',
-            'type',
-            'search',
-            'totalRooms',
-            'totalPrice',
-            'highestPrice',
-            'lowestPrice',
-        ));
+    private function statistics(): array
+    {
+        return [
+            'totalRooms' => Room::count(),
+            'totalPrice' => Room::sum('monthly_price'),
+            'highestPrice' => Room::max('monthly_price'),
+            'lowestPrice' => Room::min('monthly_price'),
+        ];
     }
 
     public function show(string $room): View
@@ -119,6 +143,28 @@ class RoomController extends Controller
             'facilities' => ['required', 'string', 'max:1000'],
             'description' => ['required', 'string', 'max:5000'],
             'featured' => ['nullable', 'boolean'],
+        ], [
+            'required' => ':attribute wajib diisi.',
+            'string' => ':attribute harus berupa teks.',
+            'numeric' => ':attribute harus berupa angka.',
+            'integer' => ':attribute harus berupa bilangan bulat.',
+            'min' => ':attribute minimal :min.',
+            'max' => ':attribute maksimal :max.',
+            'between' => ':attribute harus antara :min dan :max.',
+            'in' => ':attribute tidak valid.',
+            'unique' => ':attribute sudah digunakan.',
+            'regex' => ':attribute hanya boleh berisi huruf dan angka tanpa spasi.',
+            'boolean' => ':attribute harus bernilai benar atau salah.',
+        ], [
+            'room_number' => 'Nomor kamar',
+            'type' => 'Tipe kamar',
+            'monthly_price' => 'Harga per bulan',
+            'floor' => 'Lantai',
+            'capacity' => 'Kapasitas',
+            'status' => 'Status',
+            'facilities' => 'Fasilitas',
+            'description' => 'Deskripsi',
+            'featured' => 'Kamar unggulan',
         ]);
 
         $data['facilities'] = array_values(array_filter(array_map(
