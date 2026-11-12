@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RoomController::class, 'home'])->name('home');
@@ -12,6 +13,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/search', [RoomController::class, 'search'])->name('rooms.search');
     Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+    Route::post('/rooms/{room}/images', [RoomImageController::class, 'store'])->whereNumber('room')->name('rooms.images.store');
+    Route::delete('/room-images/{roomImage}', [RoomImageController::class, 'destroy'])->whereNumber('roomImage')->name('room-images.destroy');
     Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->whereNumber('room')->name('rooms.edit');
     Route::put('/rooms/{room}', [RoomController::class, 'update'])->whereNumber('room')->name('rooms.update');
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->whereNumber('room')->name('rooms.destroy');

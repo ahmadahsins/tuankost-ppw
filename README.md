@@ -21,6 +21,12 @@ Setiap akun terdaftar memiliki akses pengelolaan yang sama pada tahap ini; belum
 
 Tampilan menggunakan Bootstrap 5.3.8 dari CDN dengan tema biru TuanKost. Koneksi internet diperlukan untuk memuat Bootstrap. Gunakan `APP_LOCALE=id` untuk pesan autentikasi dan validasi berbahasa Indonesia.
 
+## Foto kamar
+
+Aktifkan ekstensi GD di PHP, lalu jalankan `composer install`, `php artisan migrate`, dan `php artisan storage:link`. Setelah login, buka **Edit Kamar** untuk mengunggah atau menghapus foto. Thumbnail juga ditampilkan di halaman detail; klik thumbnail untuk membuka versi lebih besar.
+
+Unggahan mendukung JPEG, PNG, GIF, dan WebP, maksimal lima gambar per permintaan, 2 MB dan 4000 × 4000 piksel per gambar. Intervention Image menyimpan versi JPEG dengan lebar maksimal 1000 piksel dan thumbnail maksimal 300 piksel pada disk `public`. Foto dapat diakses melalui URL publiknya, sedangkan operasi unggah dan hapus memerlukan login.
+
 ## Pengujian
 
 Jalankan `php artisan test`. Konfigurasi pengujian memakai SQLite dalam memori dan tidak mengubah data MySQL aplikasi.

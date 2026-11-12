@@ -10,5 +10,6 @@
             @method('PUT')
             @include('rooms._form')
         </form>
+        @include('rooms._images', ['canManage' => true])
     </div>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -31,7 +32,7 @@ class RoomController extends Controller
         $type = is_string($requestedType) ? $requestedType : '';
         $types = Room::select('type')->distinct()->orderBy('type')->pluck('type');
 
-        $rooms = Room::query()
+        $rooms = Room::with('coverImage')
             ->when($type !== '' && $types->contains($type), function ($query) use ($type) {
                 $query->where('type', $type);
             })
@@ -53,7 +54,7 @@ class RoomController extends Controller
         $type = is_string($requestedType) ? $requestedType : '';
         $types = Room::select('type')->distinct()->orderBy('type')->pluck('type');
 
-        $rooms = Room::query()
+        $rooms = Room::with('coverImage')
             ->when($type !== '' && $types->contains($type), function ($query) use ($type) {
                 $query->where('type', $type);
             })
@@ -82,7 +83,7 @@ class RoomController extends Controller
 
     public function show(string $room): View
     {
-        $room = Room::where('slug', $room)->firstOrFail();
+        $room = Room::with('images')->where('slug', $room)->firstOrFail();
 
         return view('rooms.show', compact('room'));
     }
@@ -104,6 +105,8 @@ class RoomController extends Controller
 
     public function edit(Room $room): View
     {
+        $room->load('images');
+
         return view('rooms.edit', compact('room'));
     }
 
@@ -119,7 +122,13 @@ class RoomController extends Controller
 
     public function destroy(Room $room): RedirectResponse
     {
+        $paths = $room->images()->get()->flatMap(fn ($image) => [
+            $image->image_path,
+            $image->thumbnail_path,
+        ])->all();
+
         $room->delete();
+        Storage::disk('public')->delete($paths);
 
         return redirect()->route('rooms.index')->with('success', 'Kamar berhasil dihapus.');
     }

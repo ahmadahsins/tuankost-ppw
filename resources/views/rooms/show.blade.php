@@ -43,5 +43,6 @@
                 @endforelse
             </tbody>
         </table>
+        @include('rooms._images', ['canManage' => false])
     </div>
 @endsection
