@@ -19,6 +19,9 @@
                 @auth
                     <a href="{{ route('dashboard') }}">Dashboard</a>
                     <a href="{{ route('rooms.index') }}">Kamar</a>
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('users.index') }}">Pengguna</a>
+                    @endif
                     <form class="logout-form" method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit">Logout</button>

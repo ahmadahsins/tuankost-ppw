@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomImageController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RoomController::class, 'home'])->name('home');
@@ -9,6 +10,8 @@ Route::view('/about', 'about')->name('about');
 
 Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::resource('users', UserController::class)->except('show')->middleware('admin');
+
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::get('/rooms/search', [RoomController::class, 'search'])->name('rooms.search');
     Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
