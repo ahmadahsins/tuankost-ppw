@@ -41,6 +41,30 @@ $user->save();
 
 Muat ulang halaman setelah mengubah level. Melalui menu **Pengguna**, admin dapat menambah, melihat daftar, mengubah, dan menghapus akun. Penghapusan akun sendiri dan perubahan level akun sendiri dibatasi.
 
-## Pengujian
+## Email login dan registrasi (Pertemuan 12)
+
+Mailtrap Email Sandbox menampung email pengujian dari TuanKost. Buka Mailtrap, pilih Email Sandbox dan inbox pengujian, lalu salin SMTP username dan password dari tab integrasi ke file lokal `.env`:
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_SCHEME=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=username_smtp_dari_mailtrap
+MAIL_PASSWORD=password_smtp_dari_mailtrap
+MAIL_FROM_ADDRESS="no-reply@tuankost.test"
+MAIL_FROM_NAME="TuanKost"
+QUEUE_CONNECTION=database
+```
+
+Isi kredensial sendiri di `.env`. Setelah mengubah konfigurasi, jalankan `php artisan config:clear` dan `php artisan queue:restart`. Jalankan `php artisan migrate` untuk memastikan tabel antrean tersedia.
+
+Jalankan `php artisan serve` dan `php artisan queue:work --tries=3` pada dua terminal berbeda. Pastikan MySQL tetap berjalan. Email selamat datang dikirim saat registrasi berhasil. Login otomatis setelah registrasi tidak mengirim email login tambahan. Login berhasil berikutnya mengirim pemberitahuan waktu login. Logout, login gagal, serta pembuatan akun melalui CRUD admin tidak mengirim email.
+
+Listener `SendAccountActivityEmail` ditemukan otomatis oleh Laravel untuk event `Login` dan `Registered`. Mailable `AccountActivityMail` diproses melalui database queue setelah transaksi commit, dengan maksimum tiga percobaan dan jeda retry 30 detik. Template berada di `resources/views/emails/account-activity.blade.php`.
+
+Untuk menguji, registrasikan akun contoh lalu cek inbox Sandbox. Logout dan login kembali untuk memeriksa email login. Hasil pengiriman masuk ke inbox Mailtrap Sandbox. Jika worker gagal, periksa `php artisan queue:failed`; setelah konfigurasi diperbaiki, ulangi job yang sesuai dengan `php artisan queue:retry ID_JOB`.
+
+## Pengujian otomatis
 
 Jalankan `php artisan test`. Konfigurasi pengujian memakai SQLite dalam memori dan tidak mengubah data MySQL aplikasi.
